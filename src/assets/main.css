@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+/* Token warna tema laut (sama seperti v1). Dipakai sebagai bg-primary, text-primary, dst. */
+@theme {
+  --color-primary: #0E7490;
+  --color-secondary: #22D3EE;
+  --color-accent: #FB923C;
+  --color-surface: #F0FDFA;
+}
