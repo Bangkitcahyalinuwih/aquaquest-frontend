@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 const routes = [
   { path: '/', name: 'home', component: () => import('@/pages/HomePage.vue') },
@@ -30,6 +31,25 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior: () => ({ top: 0 }),
+})
+
+// Guard: dijalankan sebelum setiap perpindahan halaman.
+// PENTING: ini hanya kenyamanan tampilan. Pengamanan sebenarnya ada di API (401 dan 403).
+router.beforeEach(async (to) => {
+  const auth = useAuthStore()
+
+  // Saat halaman baru dibuka atau di-refresh, pulihkan sesi dari token sebelum memutuskan apa pun.
+  if (!auth.ready) await auth.restore()
+
+  if (to.meta.requiresAuth && !auth.isLoggedIn) {
+    return { name: 'login', query: { redirect: to.fullPath } }   // ingat tujuan semula
+  }
+  if (to.meta.requiresAdmin && !auth.isAdmin) {
+    return { name: 'forbidden' }
+  }
+  if (to.meta.guestOnly && auth.isLoggedIn) {
+    return { name: auth.isAdmin ? 'admin-dashboard' : 'dashboard' }
+  }
 })
 
 export default router
