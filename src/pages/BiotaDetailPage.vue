@@ -1,9 +1,12 @@
 <script setup>
-import { computed, watch } from 'vue'
+import { computed, defineAsyncComponent, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { getBiota } from '@/api/biota'
 import { useAsyncData } from '@/composables/useAsyncData'
 import StateBlock from '@/components/ui/StateBlock.vue'
+
+// Peta dimuat secara malas (lazy load) agar tidak membebani halaman lain
+const BiotaMap = defineAsyncComponent(() => import('@/components/biota/BiotaMap.vue'))
 
 const route = useRoute()
 const { data, loading, error, muat } = useAsyncData(getBiota)
@@ -39,10 +42,9 @@ const labelStatus = { LC: 'Risiko rendah', NT: 'Hampir terancam', VU: 'Rentan', 
         <p class="mt-4 leading-relaxed text-slate-700">{{ biota.deskripsi }}</p>
         <p v-if="biota.habitat" class="mt-3 text-sm"><strong>Habitat:</strong> {{ biota.habitat }}</p>
 
-        <!-- Peta Leaflet ditambahkan di minggu 2. Sementara tampilkan koordinatnya. -->
-        <div v-if="biota.latitude !== null && biota.longitude !== null" class="mt-4 rounded border bg-white p-4 text-sm text-slate-600">
-          Lokasi: {{ biota.latitude }}, {{ biota.longitude }} (peta akan ditambahkan)
-        </div>
+        <!-- Komponen peta Leaflet -->
+        <BiotaMap v-if="biota.latitude !== null && biota.longitude !== null"
+                  :latitude="biota.latitude" :longitude="biota.longitude" :nama="biota.nama" class="mt-4" />
       </article>
     </StateBlock>
   </section>
