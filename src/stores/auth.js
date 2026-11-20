@@ -58,5 +58,20 @@ export const useAuthStore = defineStore('auth', () => {
     ready.value = true
   }
 
-  return { token, user, ready, isLoggedIn, isAdmin, login, register, logout, restore, clearSession }
+  // Mengambil ulang data pengguna dari server (misalnya setelah XP berubah). Gagal = data lama tetap dipakai.
+  async function refreshUser() {
+    try {
+      const body = await authApi.me()
+      user.value = body.data
+    } catch {
+      // abaikan: tampilan tetap memakai data yang sudah ada
+    }
+  }
+
+  // Memperbarui data pengguna dari respons endpoint lain (misalnya profil).
+  function updateUser(userBaru) {
+    user.value = userBaru
+  }
+
+  return { token, user, ready, isLoggedIn, isAdmin, login, register, logout, restore, clearSession, refreshUser, updateUser }
 })
