@@ -18,7 +18,7 @@ async function submit() {
   loading.value = true
   errors.value = {}
   try {
-    await auth.register(form)   // setelah berhasil, pengguna otomatis login
+    await auth.register(form) // setelah berhasil, pengguna otomatis login
     toast.success('Akun berhasil dibuat. Selamat datang!')
     router.push({ name: 'dashboard' })
   } catch (e) {
@@ -38,22 +38,22 @@ async function submit() {
       <form class="mt-6 space-y-4" @submit.prevent="submit">
         <FormField id="name" label="Nama" :error="errors.name">
           <input id="name" v-model="form.name" type="text" required autocomplete="name"
-                 class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary focus:ring-primary" />
         </FormField>
 
         <FormField id="email" label="Email" :error="errors.email">
           <input id="email" v-model="form.email" type="email" required autocomplete="email"
-                 class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary focus:ring-primary" />
         </FormField>
 
         <FormField id="password" label="Kata sandi (minimal 8 karakter)" :error="errors.password">
           <input id="password" v-model="form.password" type="password" required autocomplete="new-password"
-                 class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary focus:ring-primary" />
         </FormField>
 
         <FormField id="password_confirmation" label="Ulangi kata sandi" :error="errors.password_confirmation">
           <input id="password_confirmation" v-model="form.password_confirmation" type="password" required autocomplete="new-password"
-                 class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-primary focus:ring-primary" />
+                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary focus:ring-primary" />
         </FormField>
 
         <button type="submit" :disabled="loading"
