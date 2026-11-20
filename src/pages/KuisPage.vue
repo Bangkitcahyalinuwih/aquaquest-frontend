@@ -20,6 +20,15 @@ function kelasOpsi(opsi) {
     <!-- Memuat -->
     <p v-if="status === 'memuat'" class="py-16 text-center text-slate-600">Memuat soal...</p>
 
+    <!-- Gagal (misalnya belum ada soal) -->
+    <div v-else-if="status === 'gagal'" class="py-16 text-center">
+      <p class="font-semibold text-red-600">{{ pesanError }}</p>
+      <div class="mt-4 flex justify-center gap-3">
+        <button class="rounded-md bg-primary px-4 py-2 text-sm text-white" @click="mulai">Coba lagi</button>
+        <RouterLink :to="{ name: 'home' }" class="rounded-md border px-4 py-2 text-sm text-slate-600">Beranda</RouterLink>
+      </div>
+    </div>
+
     <!-- Sedang mengerjakan -->
     <div v-else-if="status === 'berjalan'">
       <div class="mb-3 flex items-center justify-between">
@@ -30,6 +39,10 @@ function kelasOpsi(opsi) {
       <div class="mb-6 h-2 w-full rounded-full bg-slate-200">
         <div class="h-2 rounded-full bg-secondary transition-all" :style="{ width: progres + '%' }"></div>
       </div>
+
+      <!-- Soal tebak gambar -->
+      <img v-if="soalSekarang.tipe === 'gambar' && soalSekarang.gambar_url" :src="soalSekarang.gambar_url" alt="Gambar soal"
+           class="mx-auto mb-4 max-h-64 rounded-lg object-contain" />
 
       <h1 class="mb-4 text-lg font-semibold">{{ soalSekarang.pertanyaan }}</h1>
 
@@ -60,6 +73,13 @@ function kelasOpsi(opsi) {
         <RouterLink :to="{ name: 'koleksi' }" class="rounded-md border border-primary px-4 py-2 text-sm text-primary">Lihat Koleksi</RouterLink>
         <RouterLink :to="{ name: 'dashboard' }" class="rounded-md border px-4 py-2 text-sm text-slate-600">Dashboard</RouterLink>
       </div>
+    </div>
+
+    <!-- Waktu habis -->
+    <div v-else-if="status === 'habis_waktu'" class="rounded-lg bg-white p-6 text-center shadow">
+      <h1 class="text-xl font-bold text-red-600">Waktu Habis!</h1>
+      <p class="mt-2 text-slate-600">Sesi ini tidak dihitung. Coba lagi dan jawab lebih cepat.</p>
+      <button class="mt-4 rounded-md bg-primary px-4 py-2 text-sm text-white" @click="mulai">Coba lagi</button>
     </div>
   </section>
 </template>
